@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل استلام السلاح - النموذج الذكي</title>
+    <style>
+        :root {
+            --bg: #07332E;
+            --gold: #B9A77A;
+            --gold-light: #d4c598;
+            --white: #ffffff;
+            --error: #e74c3c;
+            --input-bg: #0a4640;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            background-color: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+        }
+        .container { width: 100%; max-width: 460px; margin: auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header .unit-name {
+            font-size: 24px; font-weight: 900; color: var(--gold);
+            letter-spacing: 2px; margin-bottom: 6px;
+            text-shadow: 0 0 8px rgba(185, 167, 122, 0.6);
+        }
+        .header h1 { color: var(--gold); font-size: 22px; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; }
+        .header .subtitle { color: var(--gold-light); font-size: 12px; letter-spacing: 3px; opacity: 0.8; }
+        .card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(185, 167, 122, 0.25);
+            border-radius: 16px; padding: 20px 18px;
+            backdrop-filter: blur(2px); margin-bottom: 20px;
+        }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; color: var(--gold); font-size: 13px; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.5px; }
+        input, select {
+            width: 100%; padding: 12px 14px; border: 1px solid var(--gold);
+            border-radius: 8px; font-size: 14px; text-align: right;
+            background-color: var(--input-bg); color: var(--white);
+            transition: border-color 0.3s, box-shadow 0.3s; font-family: inherit;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 2px rgba(185, 167, 122, 0.15); }
+        .radio-group { display: flex; gap: 24px; margin-top: 2px; }
+        .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 400; color: var(--white); cursor: pointer; font-size: 14px; }
+        .radio-group input[type="radio"] { width: auto; accent-color: var(--gold); cursor: pointer; }
+        .deficiency-section {
+            background-color: rgba(185, 167, 122, 0.05); border: 1px dashed var(--gold);
+            border-radius: 10px; padding: 14px; margin-top: 12px; transition: all 0.3s ease;
+        }
+        .deficiency-section.hidden { display: none; }
+        .deficiency-section .deficiency-title { color: var(--gold); font-size: 12px; font-weight: 600; margin-bottom: 10px; letter-spacing: 1px; }
+        .checkbox-list { display: flex; flex-direction: column; gap: 8px; }
+        .checkbox-list label {
+            display: flex; align-items: center; gap: 8px; font-weight: 400;
+            color: var(--white); cursor: pointer; font-size: 14px; padding: 6px 0;
+            border-bottom: 1px solid rgba(185, 167, 122, 0.1);
+        }
+        .checkbox-list input[type="checkbox"] { width: auto; accent-color: var(--gold); cursor: pointer; min-width: 18px; height: 18px; }
+        .btn-share {
+            width: 100%; padding: 14px 25px; font-size: 16px; font-weight: bold;
+            border-radius: 8px; cursor: pointer; margin-top: 20px; transition: all 0.3s;
+            font-family: inherit; letter-spacing: 1px; background-color: var(--gold);
+            color: var(--bg); border: none;
+        }
+        .btn-share:hover { background-color: var(--gold-light); box-shadow: 0 6px 18px rgba(185, 167, 122, 0.3); }
+        .btn-share:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+        .btn-whatsapp {
+            display: none;
+            width: 100%; padding: 12px 20px; font-size: 14px; font-weight: bold;
+            border-radius: 8px; cursor: pointer; margin-top: 10px; transition: all 0.3s;
+            font-family: inherit; background-color: #25D366; color: white; border: none;
+        }
+        .btn-whatsapp:hover { background-color: #20b558; }
+        .preview {
+            background-color: rgba(0, 0, 0, 0.25); border-radius: 8px; padding: 12px;
+            margin-top: 16px; text-align: right; font-size: 11px; color: var(--gold-light);
+            white-space: pre-line; max-height: 100px; overflow-y: auto;
+            border: 1px solid rgba(185, 167, 122, 0.15); font-family: monospace;
+        }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center;
+            justify-content: center; z-index: 1000; visibility: hidden; opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+        }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+        .modal-box {
+            background-color: var(--bg); border: 2px solid var(--gold);
+            border-radius: 16px; padding: 24px 20px; text-align: center;
+            max-width: 320px; width: 90%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .modal-box p { color: var(--gold); font-size: 16px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
+        .modal-buttons { display: flex; gap: 12px; justify-content: center; }
+        .modal-buttons button {
+            padding: 10px 22px; border-radius: 8px; font-weight: 600;
+            cursor: pointer; font-family: inherit; font-size: 14px; transition: all 0.3s;
+        }
+        .btn-confirm { background-color: var(--gold); color: var(--bg); border: none; }
+        .btn-confirm:hover { background-color: var(--gold-light); }
+        .btn-cancel { background-color: transparent; color: var(--gold); border: 1px solid var(--gold); }
+        .btn-cancel:hover { background-color: rgba(185, 167, 122, 0.1); }
+        .footer {
+            text-align: center; margin-top: 24px; font-size: 14px; font-style: italic;
+            letter-spacing: 2px; font-family: 'Georgia', 'Times New Roman', serif;
+            color: var(--gold); opacity: 0.9; animation: gentlePulse 2.5s infinite ease-in-out;
+        }
+        @keyframes gentlePulse {
+            0% { text-shadow: 0 0 4px rgba(185, 167, 122, 0.4); }
+            50% { text-shadow: 0 0 12px rgba(185, 167, 122, 0.9), 0 0 20px rgba(185, 167, 122, 0.5); }
+            100% { text-shadow: 0 0 4px rgba(185, 167, 122, 0.4); }
+        }
+        @media (max-width: 400px) {
+            .card { padding: 14px 12px; }
+            input, select { padding: 10px 12px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="unit-name">القوة التنفيذية (القسم الجنوبي)</div>
+            <h1>سجل استلام السلاح</h1>
+            <p class="subtitle">النموذج الرسمي</p>
+        </div>
+
+        <div class="card">
+            <div class="form-group"><label>الاسم الثلاثي</label><input type="text" id="fullName" placeholder="اكتب الاسم الثلاثي كاملا"></div>
+            <div class="form-group"><label>الرقم الذاتي</label><input type="text" id="idNumber" placeholder="ادخل الرقم الذاتي"></div>
+            <div class="form-group"><label>المسمى الوظيفي</label><select id="jobTitle"><option value="">اختر المسمى الوظيفي...</option><option value="عنصر">عنصر</option><option value="قائد مجموعة">قائد مجموعة</option><option value="سائق">سائق</option><option value="اداري">اداري</option><option value="رئيس قسم">رئيس قسم</option><option value="رئيس مكتب">رئيس مكتب</option></select></div>
+            <div class="form-group"><label>نوع الحيازة</label><select id="possessionType"><option value="">اختر نوع الحيازة...</option><option value="استلام">استلام</option><option value="شخصي">شخصي</option></select></div>
+            <div class="form-group"><label>السلاح المستلم</label><select id="weapon"><option value="">اختر السلاح...</option><option value="كلاشنكوف">كلاشنكوف</option><option value="مسدس">مسدس</option></select></div>
+            <div class="form-group"><label>رقم السلاح</label><input type="text" id="weaponNumber" placeholder="ادخل رقم السلاح"></div>
+            <div class="form-group"><label>حالة السلاح</label><select id="weaponCondition"><option value="">اختر حالة السلاح...</option><option value="ممتاز">ممتاز</option><option value="جيد">جيد</option><option value="وسط">وسط</option><option value="غير صالح للعمل">غير صالح للعمل</option></select></div>
+            <div class="form-group"><label>عدد المخازن</label><select id="magazineCount"><option value="">اختر عدد المخازن...</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></div>
+            <div class="form-group"><label>عدد الذخيرة</label><input type="tel" id="ammoCount" placeholder="ادخل عدد الذخيرة" inputmode="numeric" pattern="[0-9]*"></div>
+            <div class="form-group"><label>هل تملك زي عسكري كامل</label><div class="radio-group"><label><input type="radio" name="uniform" value="نعم"> نعم</label><label><input type="radio" name="uniform" value="لا"> لا</label></div></div>
+            <div class="deficiency-section hidden" id="deficiencySection">
+                <p class="deficiency-title">حدد النواقص</p>
+                <div class="checkbox-list">
+                    <label><input type="checkbox" value="زي عسكري"> زي عسكري</label>
+                    <label><input type="checkbox" value="قبعة"> قبعة</label>
+                    <label><input type="checkbox" value="قشاط"> قشاط</label>
+                    <label><input type="checkbox" value="حذاء عسكري"> حذاء عسكري</label>
+                    <label><input type="checkbox" value="جعبة عسكرية"> جعبة عسكرية</label>
+                </div>
+            </div>
+            <button class="btn-share" id="shareBtn" disabled>مشاركة (تلقائي)</button>
+            <button class="btn-whatsapp" id="whatsappBtn">إرسال عبر واتساب (يدوي)</button>
+            <div class="preview" id="preview">المعاينة تظهر هنا بعد اكتمال البيانات...</div>
+        </div>
+        <div class="footer">تطوير وتصميم أبو عزام</div>
+    </div>
+
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box"><p>هل ترغب في المشاركة؟</p><div class="modal-buttons"><button class="btn-confirm" id="btnConfirmShare">نعم، مشاركة</button><button class="btn-cancel" id="btnCancelShare">الغاء</button></div></div>
+    </div>
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box"><p>تم تسجيل البيانات بنجاح!</p><div class="modal-buttons"><button class="btn-confirm" id="btnCloseSuccess">موافق</button></div></div>
+    </div>
+
+    <script>
+        // الرابط الجديد للخادم
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygKZvLWGz-jN2Wpoffk1fVzgSrr5OKjf-eqP8lycul1E8zD7AShaLATRgoIRiE1XTR/exec';
+
+        const fullName = document.getElementById('fullName');
+        const idNumber = document.getElementById('idNumber');
+        const jobTitle = document.getElementById('jobTitle');
+        const possessionType = document.getElementById('possessionType');
+        const weapon = document.getElementById('weapon');
+        const weaponNumber = document.getElementById('weaponNumber');
+        const weaponCondition = document.getElementById('weaponCondition');
+        const magazineCount = document.getElementById('magazineCount');
+        const ammoCount = document.getElementById('ammoCount');
+        const shareBtn = document.getElementById('shareBtn');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const preview = document.getElementById('preview');
+        const deficiencySection = document.getElementById('deficiencySection');
+        const confirmModal = document.getElementById('confirmModal');
+        const successModal = document.getElementById('successModal');
+
+        function getUniformValue() {
+            const radio = document.querySelector('input[name="uniform"]:checked');
+            return radio ? radio.value : null;
+        }
+
+        function getDeficiencyList() {
+            const checkboxes = document.querySelectorAll('#deficiencySection input[type="checkbox"]:checked');
+            const values = [];
+            checkboxes.forEach(cb => values.push(cb.value));
+            return values.join('، ');
+        }
+
+        function handleUniformChange() {
+            if (getUniformValue() === 'لا') deficiencySection.classList.remove('hidden');
+            else {
+                deficiencySection.classList.add('hidden');
+                document.querySelectorAll('#deficiencySection input[type="checkbox"]').forEach(cb => cb.checked = false);
+            }
+            validateForm();
+        }
+
+        function validateForm() {
+            const uniformValue = getUniformValue();
+            const deficiencyFilled = (uniformValue === 'لا') ? (getDeficiencyList().length > 0) : true;
+            const allFilled = fullName.value.trim() && idNumber.value.trim() && jobTitle.value && possessionType.value &&
+                weapon.value && weaponNumber.value.trim() && weaponCondition.value && magazineCount.value &&
+                ammoCount.value.trim() && uniformValue && deficiencyFilled;
+            shareBtn.disabled = !allFilled;
+            if (allFilled) updatePreview();
+            else preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
+            return allFilled;
+        }
+
+        function updatePreview() {
+            const uniformValue = getUniformValue();
+            let deficiencyText = (uniformValue === 'لا') ? getDeficiencyList() : '';
+            let previewText = `الاسم الثلاثي: ${fullName.value.trim()}\nالرقم الذاتي: ${idNumber.value.trim()}\nالمسمى الوظيفي: ${jobTitle.value}\nنوع الحيازة: ${possessionType.value}\nالسلاح المستلم: ${weapon.value}\nرقم السلاح: ${weaponNumber.value.trim()}\nحالة السلاح: ${weaponCondition.value}\nعدد المخازن: ${magazineCount.value}\nعدد الذخيرة: ${ammoCount.value.trim()}\nهل تملك زي عسكري كامل: ${uniformValue}`;
+            if (deficiencyText) previewText += `\nالنواقص: ${deficiencyText}`;
+            preview.textContent = '*السلام عليكم ورحمة الله وبركاته*\n' + previewText;
+        }
+
+        function openConfirmModal() { if (!validateForm()) return; confirmModal.classList.add('active'); }
+        function closeConfirmModal() { confirmModal.classList.remove('active'); }
+
+        async function submitData() {
+            closeConfirmModal();
+            if (!validateForm()) return;
+            const uniformValue = getUniformValue();
+            let deficiencyText = (uniformValue === 'لا') ? getDeficiencyList() : '';
+            const payload = {
+                'الاسم الثلاثي': fullName.value.trim(),
+                'الرقم الذاتي': idNumber.value.trim(),
+                'المسمى الوظيفي': jobTitle.value,
+                'نوع الحيازة': possessionType.value,
+                'السلاح': weapon.value,
+                'رقم السلاح': weaponNumber.value.trim(),
+                'حالة السلاح': weaponCondition.value,
+                'المخازن': magazineCount.value,
+                'الذخيرة': ammoCount.value.trim(),
+                'الزي العسكري': uniformValue,
+                'النواقص': deficiencyText
+            };
+            try {
+                shareBtn.textContent = 'جاري الإرسال...'; shareBtn.disabled = true;
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    successModal.classList.add('active');
+                    document.querySelectorAll('input[type="text"], input[type="tel"]').forEach(i => i.value = '');
+                    document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                    document.querySelectorAll('input[name="uniform"]').forEach(r => r.checked = false);
+                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    deficiencySection.classList.add('hidden');
+                    preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
+                    validateForm();
+                    whatsappBtn.style.display = 'none';
+                } else {
+                    alert('خطأ من السيرفر: ' + (result.message || 'غير معروف'));
+                    whatsappBtn.style.display = 'block';
+                }
+            } catch (error) {
+                alert('فشل الاتصال بالسيرفر. تفاصيل الخطأ: ' + error.message);
+                whatsappBtn.style.display = 'block';
+            } finally {
+                shareBtn.textContent = 'مشاركة (تلقائي)'; shareBtn.disabled = false;
+            }
+        }
+
+        function sendViaWhatsApp() {
+            const messageText = preview.textContent;
+            const whatsappURL = `https://wa.me/963951345692?text=${encodeURIComponent(messageText)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('input', validateForm);
+            el.addEventListener('change', validateForm);
+        });
+        document.querySelectorAll('input[name="uniform"]').forEach(radio => radio.addEventListener('change', handleUniformChange));
+        ammoCount.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+        shareBtn.addEventListener('click', openConfirmModal);
+        document.getElementById('btnConfirmShare').addEventListener('click', submitData);
+        document.getElementById('btnCancelShare').addEventListener('click', closeConfirmModal);
+        document.getElementById('btnCloseSuccess').addEventListener('click', () => successModal.classList.remove('active'));
+        whatsappBtn.addEventListener('click', sendViaWhatsApp);
+        confirmModal.addEventListener('click', function(e) { if (e.target === confirmModal) closeConfirmModal(); });
+        successModal.addEventListener('click', function(e) { if (e.target === successModal) successModal.classList.remove('active'); });
+    </script>
+</body>
+</html>
