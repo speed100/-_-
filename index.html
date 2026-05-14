@@ -249,28 +249,25 @@
             };
             try {
                 shareBtn.textContent = 'جاري الإرسال...'; shareBtn.disabled = true;
-                const response = await fetch(SCRIPT_URL, {
+                // تمت إضافة mode: 'no-cors' لتجاوز مشكلة CORS
+                await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                const result = await response.json();
-                if (result.status === 'success') {
-                    successModal.classList.add('active');
-                    document.querySelectorAll('input[type="text"], input[type="tel"]').forEach(i => i.value = '');
-                    document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-                    document.querySelectorAll('input[name="uniform"]').forEach(r => r.checked = false);
-                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-                    deficiencySection.classList.add('hidden');
-                    preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
-                    validateForm();
-                    whatsappBtn.style.display = 'none';
-                } else {
-                    alert('خطأ من السيرفر: ' + (result.message || 'غير معروف'));
-                    whatsappBtn.style.display = 'block';
-                }
+                // لا يمكن قراءة الرد مع no-cors، نفترض النجاح
+                successModal.classList.add('active');
+                document.querySelectorAll('input[type="text"], input[type="tel"]').forEach(i => i.value = '');
+                document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                document.querySelectorAll('input[name="uniform"]').forEach(r => r.checked = false);
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                deficiencySection.classList.add('hidden');
+                preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
+                validateForm();
+                whatsappBtn.style.display = 'none';
             } catch (error) {
-                alert('فشل الاتصال بالسيرفر. تفاصيل الخطأ: ' + error.message);
+                alert('فشل الاتصال بالسيرفر. جاري فتح واتساب...');
                 whatsappBtn.style.display = 'block';
             } finally {
                 shareBtn.textContent = 'مشاركة (تلقائي)'; shareBtn.disabled = false;
