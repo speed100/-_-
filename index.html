@@ -33,7 +33,6 @@
             height: auto;
             margin: 0 auto 15px auto;
             display: block;
-            filter: drop-shadow(0 0 10px rgba(185,167,122,0.6));
         }
         .unit-name {
             font-size: 24px;
@@ -41,7 +40,7 @@
             color: var(--gold);
             letter-spacing: 2px;
             margin-bottom: 6px;
-            text-shadow: 0 0 12px rgba(185,167,122,0.8), 0 0 4px rgba(0,0,0,0.5);
+            text-shadow: 0 0 3px rgba(0,0,0,0.8);
         }
         .header h1 {
             color: var(--gold);
@@ -49,14 +48,14 @@
             font-weight: 700;
             letter-spacing: 2px;
             margin-bottom: 4px;
-            text-shadow: 0 0 10px rgba(185,167,122,0.6);
+            text-shadow: 0 0 3px rgba(0,0,0,0.8);
         }
         .header .subtitle {
             color: var(--gold-light);
             font-size: 12px;
             letter-spacing: 3px;
             opacity: 0.9;
-            text-shadow: 0 0 6px rgba(185,167,122,0.4);
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
         .card {
             background: rgba(255, 255, 255, 0.03);
@@ -72,7 +71,7 @@
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 6px;
-            text-shadow: 0 0 8px rgba(185,167,122,0.5);
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
         input {
             width: 100%;
@@ -85,7 +84,6 @@
             color: var(--white);
             transition: border-color 0.3s, box-shadow 0.3s;
             font-family: inherit;
-            text-shadow: 0 0 4px rgba(255,255,255,0.3);
         }
         input:focus {
             outline: none;
@@ -101,6 +99,7 @@
             font-size: 11px;
             margin-top: 4px;
             opacity: 0.9;
+            text-shadow: 0 0 2px rgba(0,0,0,0.7);
         }
         .btn {
             width: 100%;
@@ -114,33 +113,27 @@
             border: none;
             font-family: inherit;
             letter-spacing: 1px;
-            text-shadow: 0 0 6px rgba(0,0,0,0.4);
         }
         .btn-primary {
             background: var(--gold);
             color: var(--bg);
-            box-shadow: 0 0 15px rgba(185,167,122,0.3);
         }
         .btn-primary:hover {
             background: var(--gold-light);
-            box-shadow: 0 6px 18px rgba(185,167,122,0.5);
         }
         .btn-primary:disabled {
             opacity: 0.35;
             cursor: not-allowed;
-            box-shadow: none;
         }
         .btn-outline {
             background: transparent;
             border: 1px solid var(--gold);
             color: var(--gold);
-            text-shadow: 0 0 6px rgba(185,167,122,0.5);
         }
         .btn-outline:hover { background: rgba(185,167,122,0.1); }
         .btn-whatsapp {
             background: #25D366;
             color: white;
-            box-shadow: 0 0 12px rgba(37,211,102,0.4);
         }
         .btn-whatsapp:hover { background: #20b558; }
         .preview-box {
@@ -156,7 +149,7 @@
             overflow-y: auto;
             border: 1px solid rgba(185,167,122,0.15);
             font-family: monospace;
-            text-shadow: 0 0 4px rgba(0,0,0,0.5);
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
         .modal {
             position: fixed;
@@ -180,13 +173,12 @@
             text-align: center;
             max-width: 320px;
             width: 90%;
-            box-shadow: 0 0 20px rgba(185,167,122,0.3);
         }
         .modal-box p {
             color: var(--gold);
             margin-bottom: 16px;
             font-weight: 600;
-            text-shadow: 0 0 10px rgba(185,167,122,0.6);
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
         .progress-bar {
             width: 100%;
@@ -201,7 +193,6 @@
             width: 0%;
             background: var(--gold);
             transition: width 0.3s;
-            box-shadow: 0 0 10px var(--gold);
         }
         .footer {
             text-align: center;
@@ -211,17 +202,11 @@
             font-style: italic;
             opacity: 0.9;
             font-family: 'Georgia', serif;
-            animation: gentlePulse 2.5s infinite ease-in-out;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            text-shadow: 0 0 8px rgba(185,167,122,0.6);
-        }
-        @keyframes gentlePulse {
-            0% { text-shadow: 0 0 4px rgba(185,167,122,0.4); }
-            50% { text-shadow: 0 0 12px rgba(185,167,122,0.9), 0 0 20px rgba(185,167,122,0.5); }
-            100% { text-shadow: 0 0 4px rgba(185,167,122,0.4); }
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -471,19 +456,16 @@
                     preview.textContent = 'المعاينة تظهر هنا بعد اكتمال البيانات...';
                     validateForm();
                 } else {
-                    // خطأ من السيرفر (مثلاً تكرار)
                     alert(result.message || 'خطأ غير معروف');
-                    currentAttempt = MAX_RETRIES; // لا نكمل، نذهب للفشل
+                    currentAttempt = MAX_RETRIES;
                     showRetryOrFinal();
                 }
             } catch (error) {
                 progressModal.classList.remove('active');
                 if (currentAttempt < MAX_RETRIES) {
-                    // فشل مؤقت، نظهر نافذة إعادة المحاولة
                     retryMessage.textContent = `فشل الاتصال (محاولة ${currentAttempt} من ${MAX_RETRIES})`;
                     retryModal.classList.add('active');
                 } else {
-                    // فشل نهائي
                     failModal.classList.add('active');
                 }
             }
@@ -497,24 +479,20 @@
             }
         }
 
-        // زر إعادة المحاولة في نافذة الفشل المؤقت
         document.getElementById('retrySendBtn').addEventListener('click', () => {
             retryModal.classList.remove('active');
             startSendProcess();
         });
 
-        // نجاح - زر موافق
         document.getElementById('successOkBtn').addEventListener('click', () => {
             successModal.classList.remove('active');
         });
 
-        // فشل نهائي - نسخ البيانات
         document.getElementById('copyDataBtn').addEventListener('click', () => {
             navigator.clipboard.writeText(preview.textContent).then(() => alert('تم نسخ البيانات'));
             failModal.classList.remove('active');
         });
 
-        // فشل نهائي - مشاركة واتساب
         document.getElementById('whatsappBtn').addEventListener('click', () => {
             const msg = preview.textContent;
             window.open(`https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
