@@ -7,29 +7,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #F4F6F9;
-            --card-bg: #FFFFFF;
-            --text: #1A1A1A;
-            --primary: #1B3A5C;
-            --primary-hover: #0F2740;
-            --border: #D1D5DB;
-            --input-bg: #FFFFFF;
-            --error: #DC2626;
+            --bg: #F4F6F9; --card-bg: #FFFFFF; --text: #1A1A1A;
+            --primary: #1B3A5C; --primary-hover: #0F2740; --border: #D1D5DB;
+            --input-bg: #FFFFFF; --error: #DC2626;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px 15px;
-            color: var(--text);
+            background: var(--bg); min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            padding: 20px 15px; color: var(--text);
         }
         .container { width: 100%; max-width: 550px; margin: auto; }
         .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .header h1 { font-size: 24px; font-weight: 700; color: var(--primary); }
         .header .subtitle { font-size: 13px; color: #6B7280; font-weight: 600; }
         .card {
             background: var(--card-bg); border: 1px solid var(--border);
@@ -38,75 +29,44 @@
         }
         .card h3 {
             font-size: 16px; font-weight: 700; color: var(--primary);
-            margin-bottom: 14px; padding-bottom: 8px;
-            border-bottom: 2px solid var(--primary);
+            margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--primary);
         }
         .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
         input, select, textarea {
             width: 100%; padding: 10px 12px; border: 1px solid var(--border);
             border-radius: 6px; font-size: 14px; background: var(--input-bg);
-            color: var(--text); transition: border-color 0.2s, box-shadow 0.2s;
-            font-family: inherit;
+            color: var(--text); transition: 0.2s; font-family: inherit;
         }
         input:focus, select:focus, textarea:focus {
-            outline: none; border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(27,58,92,0.1);
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(27,58,92,0.1);
         }
-        .error-field {
-            border-color: var(--error) !important;
-            box-shadow: 0 0 0 2px rgba(220,38,38,0.1) !important;
-        }
+        .error-field { border-color: var(--error) !important; box-shadow: 0 0 0 2px rgba(220,38,38,0.1) !important; }
         .radio-group { display: flex; gap: 20px; margin-top: 4px; }
-        .radio-group label { display: flex; align-items: center; gap: 4px; font-weight: 500; cursor: pointer; }
+        .radio-group label { font-weight: 500; cursor: pointer; }
         .hidden { display: none; }
         .btn {
             width: 100%; padding: 14px; font-size: 16px; font-weight: 700;
-            border-radius: 6px; cursor: pointer; margin-top: 12px; transition: background 0.2s;
-            border: none; font-family: inherit; letter-spacing: 0.5px;
-            background: var(--primary); color: #FFFFFF;
+            border-radius: 6px; cursor: pointer; margin-top: 12px; transition: 0.2s;
+            border: none; background: var(--primary); color: #FFFFFF; font-family: inherit;
         }
         .btn:hover { background: var(--primary-hover); }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .btn-outline {
-            background: transparent; border: 1px solid var(--primary);
-            color: var(--primary); margin-top: 8px;
+        .loading-indicator {
+            display: none; width: 100%; padding: 14px; font-size: 16px;
+            font-weight: 700; text-align: center; color: var(--primary);
         }
-        .btn-outline:hover { background: rgba(27,58,92,0.05); }
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
-            z-index: 1000; visibility: hidden; opacity: 0; transition: 0.2s;
-        }
-        .modal.active { visibility: visible; opacity: 1; }
-        .modal-box {
-            background: var(--card-bg); border-radius: 16px; padding: 24px 20px;
-            text-align: center; max-width: 320px; width: 90%;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2); border: 1px solid var(--border);
-        }
-        .modal-box h3 { color: var(--primary); margin-bottom: 12px; }
-        .modal-box p { color: #4B5563; margin-bottom: 16px; }
-        .modal-box input {
-            width: 100%; margin-bottom: 12px; padding: 10px;
-            border: 1px solid var(--border); border-radius: 6px;
-            font-family: inherit; font-size: 14px;
-        }
-        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #9CA3AF; letter-spacing: 1px; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #9CA3AF; }
         .success-screen {
             display: none; text-align: center; padding: 40px 20px;
-            background: var(--card-bg); border-radius: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04); margin-bottom: 16px;
+            background: var(--card-bg); border-radius: 12px; margin-bottom: 16px;
         }
-        .success-screen .logo { width: 100px; height: auto; margin: 0 auto 20px auto; display: block; }
+        .success-screen .logo { width: 100px; margin: 0 auto 20px auto; display: block; }
         .success-screen h2 { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         .success-screen .subtitle { font-size: 14px; color: #6B7280; margin-bottom: 24px; }
         .success-screen .verse {
             font-family: 'Noto Naskh Arabic', serif; font-size: 20px; font-weight: 700;
             color: var(--primary); margin-top: 20px; line-height: 1.8;
-        }
-        .loading-indicator {
-            display: none; width: 100%; padding: 14px; font-size: 16px; font-weight: 700;
-            text-align: center; color: var(--primary);
         }
         .date-select { display: flex; gap: 8px; }
         .date-select select { flex: 1; }
@@ -321,32 +281,9 @@
         <div class="footer" style="margin-top: 24px;">اعداد وتصميم Abu Azzam</div>
     </div>
 
-    <!-- نافذة التكرار -->
-    <div class="modal" id="duplicateModal">
-        <div class="modal-box">
-            <h3>تنبيه</h3>
-            <p>هذا الشخص مسجل مسبقاً (الاسم والرقم الذاتي موجودان). هل ترغب في تعديل بياناته؟</p>
-            <button class="btn" id="confirmUpdateBtn" style="margin-top:4px;">نعم، تعديل البيانات</button>
-            <button class="btn btn-outline" id="cancelUpdateBtn">لا، إلغاء</button>
-        </div>
-    </div>
-
-    <!-- نافذة تأكيد التعديل -->
-    <div class="modal" id="confirmUpdateModal">
-        <div class="modal-box">
-            <h3>تأكيد التعديل</h3>
-            <p>أدخل الاسم الثلاثي والرقم الذاتي لتأكيد التعديل</p>
-            <input type="text" id="confirmName" placeholder="الاسم الثلاثي">
-            <input type="text" id="confirmId" placeholder="الرقم الذاتي">
-            <button class="btn" id="submitUpdateBtn">تأكيد التعديل</button>
-            <button class="btn btn-outline" id="cancelConfirmBtn">إلغاء</button>
-        </div>
-    </div>
-
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjIMuAXSA3eHmngmgRz2Dt_KHkbZPpXDF_xixZ28IR34a0Y5UMeT82E-2lUJDOn4rR/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzTZE-0e6--ow216zjM7n5bOGGapp7rrkTkWYR7s1Ty-YKCKx7TddgLBvqAUwBHo7K/exec';
 
-        // ملء قوائم التاريخ
         window.addEventListener('load', populateDateDropdowns);
         function populateDateDropdowns() {
             const yearSelect = document.getElementById('birthYear');
@@ -356,9 +293,7 @@
             monthSelect.innerHTML = '<option value="">الشهر</option>';
             daySelect.innerHTML = '<option value="">اليوم</option>';
             const currentYear = new Date().getFullYear();
-            for (let y = currentYear - 100; y <= currentYear; y++) {
-                yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
-            }
+            for (let y = currentYear - 100; y <= currentYear; y++) yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
             for (let m = 1; m <= 12; m++) monthSelect.innerHTML += `<option value="${m}">${m}</option>`;
             for (let d = 1; d <= 31; d++) daySelect.innerHTML += `<option value="${d}">${d}</option>`;
         }
@@ -393,14 +328,13 @@
         }
         function toggleDeficiencyFields(){ document.getElementById('deficiencyFields').classList.toggle('hidden', document.querySelector('input[name="uniformComplete"]:checked')?.value !== 'لا'); }
 
-        function getFormData(actionType) {
+        function getFormData() {
             const getRadio = (name) => document.querySelector(`input[name="${name}"]:checked`)?.value || '';
             const day = document.getElementById('birthDay').value;
             const month = document.getElementById('birthMonth').value;
             const year = document.getElementById('birthYear').value;
             const birthDate = (day && month && year) ? `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}` : '';
-            const payload = {
-                action: actionType,
+            return {
                 'الاسم الثلاثي': document.getElementById('fullName').value.trim(),
                 'اللقب': document.getElementById('nickname').value.trim(),
                 'الرقم الذاتي': document.getElementById('idNumber').value.trim(),
@@ -444,7 +378,6 @@
                 'الزي العسكري': getRadio('uniformComplete'),
                 'النواقص': Array.from(document.querySelectorAll('#deficiencyFields input:checked')).map(cb=>cb.value).join('، ')
             };
-            return payload;
         }
 
         function validateForm() {
@@ -457,11 +390,10 @@
                 while (parent) { if (parent.classList?.contains('hidden')) { isHidden = true; break; } parent = parent.parentElement; }
                 if (isHidden) continue;
                 if (field.type === 'radio') {
-                    const name = field.name;
-                    if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                    if (!document.querySelector(`input[name="${field.name}"]:checked`)) {
                         isValid = false;
-                        document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.radio-group').style.border = '1px solid var(--error)');
-                    } else document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.radio-group').style.border = '');
+                        document.querySelectorAll(`input[name="${field.name}"]`).forEach(r => r.closest('.radio-group').style.border = '1px solid var(--error)');
+                    } else document.querySelectorAll(`input[name="${field.name}"]`).forEach(r => r.closest('.radio-group').style.border = '');
                     continue;
                 }
                 if (field.type === 'checkbox') continue;
@@ -483,42 +415,14 @@
             const loadingIndicator = document.getElementById('loadingIndicator');
             submitBtn.style.display = 'none';
             loadingIndicator.style.display = 'block';
-
-            const checkPayload = {
-                action: 'check',
-                'الاسم الثلاثي': document.getElementById('fullName').value.trim(),
-                'الرقم الذاتي': document.getElementById('idNumber').value.trim()
-            };
             try {
-                const checkResponse = await fetch(SCRIPT_URL, {
+                const payload = getFormData();
+                await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(checkPayload)
+                    body: JSON.stringify(payload)
                 });
-                const checkResult = await checkResponse.json();
-
-                if (checkResult.status === 'duplicate') {
-                    loadingIndicator.style.display = 'none';
-                    submitBtn.style.display = 'block';
-                    document.getElementById('duplicateModal').classList.add('active');
-                } else {
-                    await sendData('insert');
-                }
-            } catch (error) {
-                alert('فشل الاتصال. تأكد من الإنترنت وحاول مرة أخرى.');
-                loadingIndicator.style.display = 'none';
-                submitBtn.style.display = 'block';
-            }
-        }
-
-        async function sendData(actionType) {
-            const submitBtn = document.getElementById('submitBtn');
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            submitBtn.style.display = 'none';
-            loadingIndicator.style.display = 'block';
-            try {
-                const payload = getFormData(actionType);
-                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 document.getElementById('mainForm').style.display = 'none';
                 document.getElementById('successScreen').style.display = 'block';
             } catch (error) {
@@ -528,29 +432,6 @@
                 submitBtn.style.display = 'block';
             }
         }
-
-        document.getElementById('confirmUpdateBtn').addEventListener('click', () => {
-            document.getElementById('duplicateModal').classList.remove('active');
-            document.getElementById('confirmUpdateModal').classList.add('active');
-        });
-        document.getElementById('cancelUpdateBtn').addEventListener('click', () => {
-            document.getElementById('duplicateModal').classList.remove('active');
-        });
-        document.getElementById('submitUpdateBtn').addEventListener('click', () => {
-            const confirmName = document.getElementById('confirmName').value.trim();
-            const confirmId = document.getElementById('confirmId').value.trim();
-            const origName = document.getElementById('fullName').value.trim();
-            const origId = document.getElementById('idNumber').value.trim();
-            if (confirmName === origName && confirmId === origId) {
-                document.getElementById('confirmUpdateModal').classList.remove('active');
-                sendData('update');
-            } else {
-                alert('الاسم أو الرقم الذاتي غير متطابق. حاول مرة أخرى.');
-            }
-        });
-        document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
-            document.getElementById('confirmUpdateModal').classList.remove('active');
-        });
 
         function resetToForm() {
             document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"], input[type="tel"], textarea').forEach(i => i.value = '');
@@ -569,4 +450,4 @@
         document.getElementById('fullName').addEventListener('input', function(){ this.value = this.value.replace(/[^\u0621-\u064A\s]/g, ''); });
     </script>
 </body>
-    </html>
+</html>
