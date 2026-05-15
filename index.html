@@ -121,7 +121,7 @@
             <p class="subtitle">القوة التنفيذية (القسم الجنوبي)</p>
         </div>
 
-        <!-- الأقسام 1-7 كما هي بدون تغيير -->
+        <!-- القسم 1: المعلومات الشخصية -->
         <div class="card">
             <h3>المعلومات الشخصية</h3>
             <div class="form-group"><label>الاسم الثلاثي *</label><input type="text" id="fullName" placeholder="مثال: محمد علي عبد الله" data-required="true"></div>
@@ -147,6 +147,7 @@
             </div>
         </div>
 
+        <!-- القسم 2: السكن والحالة الاجتماعية -->
         <div class="card">
             <h3>السكن والحالة الاجتماعية</h3>
             <div class="form-group"><label>مكان السكن الدائم *</label><input type="text" id="permanentResidence" data-required="true"></div>
@@ -169,6 +170,7 @@
             </div>
         </div>
 
+        <!-- القسم 3: التواصل والطوارئ -->
         <div class="card">
             <h3>التواصل والطوارئ</h3>
             <div class="form-group"><label>هل لديك حساب تيلجرام؟ *</label>
@@ -184,6 +186,7 @@
             <div class="form-group"><label>رقم هاتف احتياطي *</label><input type="tel" id="emergencyPhone" data-required="true"></div>
         </div>
 
+        <!-- القسم 4: الوظيفية والمالية -->
         <div class="card">
             <h3>الوظيفية والمالية</h3>
             <div class="form-group"><label>المسمى الوظيفي *</label>
@@ -205,6 +208,7 @@
             </div>
         </div>
 
+        <!-- القسم 5: الصحية -->
         <div class="card">
             <h3>الصحية</h3>
             <div class="form-group"><label>هل تعاني من أمراض مزمنة؟ *</label>
@@ -236,6 +240,7 @@
             </div>
         </div>
 
+        <!-- القسم 6: التحصيل العلمي -->
         <div class="card">
             <h3>التحصيل العلمي</h3>
             <div class="form-group"><label>المستوى الدراسي *</label>
@@ -264,6 +269,7 @@
             </div>
         </div>
 
+        <!-- القسم 7: التجهيزات والتسليح -->
         <div class="card">
             <h3>التجهيزات والتسليح</h3>
             <div class="form-group"><label>نمرة القدم *</label><input type="number" id="shoeSize" min="30" max="50" data-required="true"></div>
@@ -338,7 +344,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjhpCxs-6675svqgd6o-QNPe-8s2EuxLitbvatii0K_MXSwvVdg40wg6F0Y0ASLy0r/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjIMuAXSA3eHmngmgRz2Dt_KHkbZPpXDF_xixZ28IR34a0Y5UMeT82E-2lUJDOn4rR/exec';
 
         // ملء قوائم التاريخ
         window.addEventListener('load', populateDateDropdowns);
@@ -458,6 +464,7 @@
                     } else document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.radio-group').style.border = '');
                     continue;
                 }
+                if (field.type === 'checkbox') continue;
                 if (!field.value.trim()) { field.classList.add('error-field'); isValid = false; }
             }
             const fullName = document.getElementById('fullName').value.trim();
@@ -477,7 +484,6 @@
             submitBtn.style.display = 'none';
             loadingIndicator.style.display = 'block';
 
-            // أولاً: إرسال طلب check
             const checkPayload = {
                 action: 'check',
                 'الاسم الثلاثي': document.getElementById('fullName').value.trim(),
@@ -492,12 +498,10 @@
                 const checkResult = await checkResponse.json();
 
                 if (checkResult.status === 'duplicate') {
-                    // إظهار نافذة التكرار
                     loadingIndicator.style.display = 'none';
                     submitBtn.style.display = 'block';
                     document.getElementById('duplicateModal').classList.add('active');
                 } else {
-                    // إرسال مباشر كـ insert
                     await sendData('insert');
                 }
             } catch (error) {
@@ -525,7 +529,6 @@
             }
         }
 
-        // أحداث نوافذ التكرار والتعديل
         document.getElementById('confirmUpdateBtn').addEventListener('click', () => {
             document.getElementById('duplicateModal').classList.remove('active');
             document.getElementById('confirmUpdateModal').classList.add('active');
@@ -566,4 +569,4 @@
         document.getElementById('fullName').addEventListener('input', function(){ this.value = this.value.replace(/[^\u0621-\u064A\s]/g, ''); });
     </script>
 </body>
-            </html>
+    </html>
